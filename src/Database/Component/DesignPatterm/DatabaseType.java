@@ -24,16 +24,29 @@ public abstract class DatabaseType extends SQLCommand implements IDatabaseType {
      */
     public ArrayList<Character> operatorsList;
     public ArrayList<String> joinsList;
+    public ArrayList<String> openingFieldsList;
     public ArrayList<Byte> queryTypesList;
-    
+
     public String LastSQL;
-    
+
+    protected final String SELECT = "SELECT ";
+    protected final String FROM = " FROM ";
+    protected final String WHERE = " WHERE ";
+    protected final String GROUP_BY = " GROUP BY ";
+    protected final String ORDER_BY = " ORDER BY ";
+    protected final String ASENDING = " ASC ";
+    protected final String DESENDING = " DSC ";
+    protected final String INSERT = " INSERT ";
+    protected final String UPDATE = " UPDATE ";
+    protected final String VALUES = " VALUES ";
 
     @SuppressWarnings("LeakingThisInConstructor")
     public DatabaseType() {
-        super.setDatabaseType(this);
+        initialize();
     }
 
-    
+    public void initialize() {
+        super.setDatabaseType(this);
+    }
 
 }

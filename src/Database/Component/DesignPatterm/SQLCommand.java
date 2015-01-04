@@ -18,10 +18,11 @@ import java.util.Date;
  *
  * @author Alim
  */
-public class SQLCommand implements IQueryType {
+public class SQLCommand {
 
     DatabaseType db;
     ArrayList<String> valuesList;
+
 
     protected SQLCommand() {
 
@@ -48,7 +49,7 @@ public class SQLCommand implements IQueryType {
     public SQLCommand where(DbColumn... columns) {
         initalizeColumn(columns.length);
         addItemsToFieldList(columns);
-        return this;
+        return db;
     }
 
     /**
@@ -59,13 +60,13 @@ public class SQLCommand implements IQueryType {
      */
     public SQLCommand values(String... values) {
         addItemsTotheValueList(values);
-        return this;
+        return db;
     }
 
     public SQLCommand operators(String... values) {
         initalizeValues(values.length);
         this.valuesList.addAll(Arrays.asList(values));
-        return this;
+        return db;
     }
 
     public SQLCommand startsWith(DbColumn column, String... values) {
@@ -111,12 +112,11 @@ public class SQLCommand implements IQueryType {
         initalizeColumn(1);
         db.fieldsList.add(column);
         addItemsTotheValueList(values);
-        return this;
+        return db;
     }
 
     public DbColumn getColumn(Field f) {
-        DbColumn col = new DbColumn();
-        col.Name = f.getName();
+        DbColumn col = new DbColumn(f.getName());
         if (f.getType().equals(Double.TYPE) || f.getType().equals(Double.class)) {
             col.Type = IDbColumnType.DOUBLE;
         } else if (f.getType() == Integer.TYPE || f.getType() == Integer.class) {
@@ -154,7 +154,7 @@ public class SQLCommand implements IQueryType {
         addItemsToFieldList(columns);
         addItemsTotheValueList(values);
 
-        return this;
+        return db;
     }
 
     void addItemsToFieldList(DbColumn... columns) {

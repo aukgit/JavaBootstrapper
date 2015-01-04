@@ -6,8 +6,6 @@
 package Database.Component.DesignPatterm;
 
 import Database.Components.IDatabaseType;
-import Global.AppConfig;
-import java.util.ArrayList;
 
 /**
  *
