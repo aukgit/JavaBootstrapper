@@ -21,6 +21,7 @@ import java.util.logging.Logger;
 public class AppConfig {
 
     public static final int MAX_TRY_LOGIN = 10;
+    public static final int NUMBER_COMMAND_INITALIZE = 25;
     public static final boolean IS_TESTING = true;
     public static final String  PERSISTENSE_CONNECTION_STRING = "chatdatabase";
     /**

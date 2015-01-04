@@ -3,12 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Database.CommonCodes;
+package Database.Components;
 
 /**
  *
  * @author Alim
  */
-public class DbInitalizer extends SQLError implements ISoftwareInformation  {
+public class DbTable {
     
 }
