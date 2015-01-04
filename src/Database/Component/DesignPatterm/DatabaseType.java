@@ -16,8 +16,23 @@ import java.util.ArrayList;
  */
 public abstract class DatabaseType extends SQLCommand implements IDatabaseType {
 
+    /**
+     * @return the databaseType
+     */
+    public static int getDatabaseType() {
+        return databaseType;
+    }
+
+    /**
+     * @param aDatabaseType the databaseType to set
+     */
+    public static void setDatabaseType(int aDatabaseType) {
+        databaseType = aDatabaseType;
+    }
+
     public ArrayList<DbColumn> fieldsList = new ArrayList<>(AppConfig.NUMBER_COMMAND_INITALIZE);
     public ArrayList<ArrayList<String>> valuesList = new ArrayList<>(AppConfig.NUMBER_COMMAND_INITALIZE);
+    private static int databaseType;
 
     /**
      *
@@ -28,7 +43,8 @@ public abstract class DatabaseType extends SQLCommand implements IDatabaseType {
     public ArrayList<Byte> queryTypesList;
 
     public String LastSQL;
-
+    
+    protected final String ALIAS = "f";
     protected final String SELECT = "SELECT ";
     protected final String FROM = " FROM ";
     protected final String WHERE = " WHERE ";
@@ -40,7 +56,6 @@ public abstract class DatabaseType extends SQLCommand implements IDatabaseType {
     protected final String UPDATE = " UPDATE ";
     protected final String VALUES = " VALUES ";
 
-    @SuppressWarnings("LeakingThisInConstructor")
     public DatabaseType() {
         initialize();
     }
@@ -48,5 +63,12 @@ public abstract class DatabaseType extends SQLCommand implements IDatabaseType {
     public void initialize() {
         super.setDatabaseType(this);
     }
-
+    
+    public abstract String getOpeningColumnNames();
+    public abstract String getWhereClause();
+    public abstract String getCompleteReadQuery();
+    public abstract String getCompleteUpdateQuery();
+    public abstract String getCompleteInsertQuery();
+    
+    
 }

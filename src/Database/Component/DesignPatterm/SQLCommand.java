@@ -70,15 +70,15 @@ public class SQLCommand {
     }
 
     public SQLCommand startsWith(DbColumn column, String... values) {
-        return addCommand(column, "=", IQueryType.STARTS_WITH, values);
+        return addCommand(column, null, IQueryType.STARTS_WITH, values);
     }
 
     public SQLCommand contains(DbColumn column, String... values) {
-        return addCommand(column, "=", IQueryType.CONTAINS, values);
+        return addCommand(column, null, IQueryType.CONTAINS, values);
     }
 
     public SQLCommand endsWith(DbColumn column, String... values) {
-        return addCommand(column, "=", IQueryType.ENDS_WITH, values);
+        return addCommand(column, null, IQueryType.ENDS_WITH, values);
     }
 
     public SQLCommand count(DbColumn column, String... values) {

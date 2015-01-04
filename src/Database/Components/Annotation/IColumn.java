@@ -30,7 +30,9 @@ public @interface IColumn {
 
     public String columnDefinition() default "";
 
-    public int length() default 255;
+    public int min() default 0;
+    
+    public int max() default 255;
 
     public int precision() default 0;
 
