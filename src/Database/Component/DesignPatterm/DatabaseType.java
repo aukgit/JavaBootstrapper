@@ -18,8 +18,12 @@ public abstract class DatabaseType extends SQLCommand {
 
     public ArrayList<Field> fieldsList = new ArrayList<>(AppConfig.NUMBER_COMMAND_INITALIZE);
     public ArrayList<ArrayList<String>> valuesList = new ArrayList<>(AppConfig.NUMBER_COMMAND_INITALIZE);
-    public ArrayList<SQLCommand> sqlCommandsList = new ArrayList<>(AppConfig.NUMBER_COMMAND_INITALIZE);
+    public ArrayList<ArrayList<String>> operatorsList;
+    public ArrayList<ArrayList<String>> operatorsList;
     
+    public String LastSQL;
+    
+
     @SuppressWarnings("LeakingThisInConstructor")
     public DatabaseType() {
         super.setDatabaseType(this);

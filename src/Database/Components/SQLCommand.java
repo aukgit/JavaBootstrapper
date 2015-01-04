@@ -18,10 +18,6 @@ import java.util.Arrays;
 public class SQLCommand implements IQueryType {
 
     DatabaseType db;
-    ArrayList<Field> columnsList;
-    ArrayList<String> valuesList;
-    String operator = "=";
-
     int queryType;
 
     protected SQLCommand() {
@@ -35,11 +31,57 @@ public class SQLCommand implements IQueryType {
     protected void setDatabaseType(DatabaseType db) {
         this.db = db;
     }
-    
+
     public SQLCommand where(Field column, String operator, String... values) {
         return addCommand(column, operator, IQueryType.WHERE_AND, values);
     }
-    
+
+    /**
+     * doesn't return new SQLCommand
+     *
+     * @param columns
+     * @return
+     */
+    public SQLCommand where(Field... columns) {
+        initalizeColumn(columns.length);
+        db.fieldsList.addAll(Arrays.asList(columns));
+        return this;
+    }
+
+    /**
+     * doesn't return new SQLCommand
+     *
+     * @param values
+     * @return
+     */
+    public SQLCommand values(String... values) {
+        initalizeValues(values.length);
+        db.valuesList.addAll(Arrays.asList(values));
+        return this;
+    }
+
+    public SQLCommand operators(String... values) {
+        initalizeValues(values.length);
+        this.valuesList.addAll(Arrays.asList(values));
+        return this;
+    }
+
+    public SQLCommand startsWith(Field column, String... values) {
+        return addCommand(column, "=", IQueryType.STARTS_WITH, values);
+    }
+
+    public SQLCommand contains(Field column, String... values) {
+        return addCommand(column, "=", IQueryType.CONTAINS, values);
+    }
+
+    public SQLCommand endsWith(Field column, String... values) {
+        return addCommand(column, "=", IQueryType.ENDS_WITH, values);
+    }
+
+    public SQLCommand count(Field column, String... values) {
+        return addCommand(column, "=", IQueryType.COUNT, values);
+    }
+
     /**
      * add query and give a new sql command. AND join
      *
@@ -78,23 +120,30 @@ public class SQLCommand implements IQueryType {
      * @return
      */
     private SQLCommand addCommand(ArrayList<Field> columns, String operator, int typeOfQuery, String... values) {
-        this.columnsList = columns;
-        initalizeValues(values.length);
+
         this.operator = operator;
         this.queryType = typeOfQuery;
+        if (columns != null) {
+            this.columnsList = columns;
+        }
 
-        valuesList.addAll(Arrays.asList(values));
+        if (values != null) {
+            initalizeValues(values.length);
+            valuesList.addAll(Arrays.asList(values));
+        }
         db.addCommand(this);
         return new SQLCommand(db);
     }
 
-    void initalizeColumn(int rows) {
+    void initalizeColumn(int rows
+    ) {
         if (this.columnsList == null) {
             this.columnsList = new ArrayList<>(rows);
         }
     }
 
-    void initalizeValues(int rows) {
+    void initalizeValues(int rows
+    ) {
         if (this.valuesList == null) {
             this.valuesList = new ArrayList<>(rows);
         }

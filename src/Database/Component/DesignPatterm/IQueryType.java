@@ -20,7 +20,8 @@ public interface IQueryType {
     int MIN             =   7;
     int MAX             =   8;
     int AVG             =   9;
-    int COMMAND         =   10;
+    int COUNT           =   10;
+    int COMMAND         =   11;
     
 }
 
