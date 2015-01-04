@@ -11,6 +11,7 @@ package Database.Components;
  */
 public class DbColumn {
     public String Name;
-    public int Type;
+    public byte Type;
+    public long Length;
 }
 

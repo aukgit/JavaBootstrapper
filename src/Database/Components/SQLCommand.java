@@ -10,6 +10,7 @@ import Database.Component.DesignPatterm.IQueryType;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 
 /**
  *
@@ -19,6 +20,7 @@ public class SQLCommand implements IQueryType {
 
     DatabaseType db;
     int queryType;
+    ArrayList<String> valuesList;
 
     protected SQLCommand() {
 
@@ -107,8 +109,30 @@ public class SQLCommand implements IQueryType {
 
     private SQLCommand addCommand(Field column, String operator, int typeOfQuery, String... values) {
         initalizeColumn(1);
-        this.columnsList.add(column);
-        return addCommand(this.columnsList, operator, typeOfQuery, values);
+        db.fieldsList.add(column);
+        return addCommand(db.fieldsList, operator, typeOfQuery, values);
+    }
+
+    public DbColumn getColumn(Field f) {
+        DbColumn col = new DbColumn();
+        col.Name = f.getName();
+        if (f.getType().equals(Double.TYPE) || f.getType().equals(Double.class)) {
+            col.Type = IDbColumnType.DOUBLE;
+        } else if (f.getType() == Integer.TYPE || f.getType() == Integer.class) {
+            col.Type = IDbColumnType.INT;
+        } else if (f.getType().equals(Long.TYPE) || f.getType().equals(Long.class)) {
+            col.Type = IDbColumnType.LONG;
+        } else if (f.getType().equals(Date.class)) {
+            col.Type = IDbColumnType.DATE;
+        } else if (f.getType().equals(Float.TYPE) || f.getType().equals(Float.class)) {
+            col.Type = IDbColumnType.FLOAT;
+        } else if (f.getType().equals(Boolean.TYPE) || f.getType().equals(Boolean.class)) {
+            col.Type = IDbColumnType.BOOLEAN;
+        } else if (f.getType().equals(Short.TYPE) || f.getType().equals(Short.class)) {
+            col.Type = IDbColumnType.SHORT;
+        } else {
+            col.Type = IDbColumnType.STRING;
+        }
     }
 
     /**
@@ -121,31 +145,33 @@ public class SQLCommand implements IQueryType {
      */
     private SQLCommand addCommand(ArrayList<Field> columns, String operator, int typeOfQuery, String... values) {
 
-        this.operator = operator;
         this.queryType = typeOfQuery;
         if (columns != null) {
-            this.columnsList = columns;
+            for (Field column : columns) {
+
+            }
         }
 
         if (values != null) {
             initalizeValues(values.length);
             valuesList.addAll(Arrays.asList(values));
+            db.valuesList.add(valuesList);
         }
         db.addCommand(this);
-        return new SQLCommand(db);
+        return this;
     }
 
-    void initalizeColumn(int rows
-    ) {
-        if (this.columnsList == null) {
-            this.columnsList = new ArrayList<>(rows);
+    void initalizeColumn(int rows) {
+        if (db.fieldsList == null) {
+            db.fieldsList = new ArrayList<>(rows);
         }
     }
 
-    void initalizeValues(int rows
-    ) {
-        if (this.valuesList == null) {
-            this.valuesList = new ArrayList<>(rows);
+    void initalizeValues(int rows) {
+        if (valuesList == null) {
+            valuesList = new ArrayList<>(rows);
         }
+
+        valuesList.clear();
     }
 }
