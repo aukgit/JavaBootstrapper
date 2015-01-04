@@ -5,7 +5,6 @@
  */
 package Database.Component.DesignPatterm;
 
-import Database.Components.SQLCommand;
 import Global.AppConfig;
 import java.lang.reflect.Field;
 import java.util.ArrayList;

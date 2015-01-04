@@ -3,10 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Database.Components;
+package Database.Component.DesignPatterm;
 
 import Database.Component.DesignPatterm.DatabaseType;
-import Database.Component.DesignPatterm.IQueryType;
+import Database.Components.Annotation.IColumn;
+import Database.Components.DbColumn;
+import Database.Components.IDbColumnType;
+import Database.Components.IQueryType;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -133,6 +136,11 @@ public class SQLCommand implements IQueryType {
         } else {
             col.Type = IDbColumnType.STRING;
         }
+
+        if (f.isAnnotationPresent(IColumn.class)) {
+            col.Name = f.getAnnotation(IColumn.class).name();
+        }
+        return col;
     }
 
     /**
@@ -148,17 +156,21 @@ public class SQLCommand implements IQueryType {
         this.queryType = typeOfQuery;
         if (columns != null) {
             for (Field column : columns) {
-
+                DbColumn col = getColumn(column);
+                db.fieldsList.add(column)
             }
         }
+        addItemsTotheValueList(values);
+        db.addCommand(this);
+        return this;
+    }
 
+    void addItemsTotheValueList(String... values) {
         if (values != null) {
             initalizeValues(values.length);
             valuesList.addAll(Arrays.asList(values));
             db.valuesList.add(valuesList);
         }
-        db.addCommand(this);
-        return this;
     }
 
     void initalizeColumn(int rows) {
