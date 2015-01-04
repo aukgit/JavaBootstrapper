@@ -5,7 +5,6 @@
  */
 package Database.Component.DesignPatterm;
 
-import Database.Component.DesignPatterm.DatabaseType;
 import Database.Components.Annotation.IColumn;
 import Database.Components.DbColumn;
 import Database.Components.IDbColumnType;
@@ -22,7 +21,6 @@ import java.util.Date;
 public class SQLCommand implements IQueryType {
 
     DatabaseType db;
-    int queryType;
     ArrayList<String> valuesList;
 
     protected SQLCommand() {
@@ -37,7 +35,7 @@ public class SQLCommand implements IQueryType {
         this.db = db;
     }
 
-    public SQLCommand where(Field column, String operator, String... values) {
+    public SQLCommand where(DbColumn column, String operator, String... values) {
         return addCommand(column, operator, IQueryType.WHERE_AND, values);
     }
 
@@ -47,9 +45,9 @@ public class SQLCommand implements IQueryType {
      * @param columns
      * @return
      */
-    public SQLCommand where(Field... columns) {
+    public SQLCommand where(DbColumn... columns) {
         initalizeColumn(columns.length);
-        db.fieldsList.addAll(Arrays.asList(columns));
+        addItemsToFieldList(columns);
         return this;
     }
 
@@ -60,8 +58,7 @@ public class SQLCommand implements IQueryType {
      * @return
      */
     public SQLCommand values(String... values) {
-        initalizeValues(values.length);
-        db.valuesList.addAll(Arrays.asList(values));
+        addItemsTotheValueList(values);
         return this;
     }
 
@@ -71,19 +68,19 @@ public class SQLCommand implements IQueryType {
         return this;
     }
 
-    public SQLCommand startsWith(Field column, String... values) {
+    public SQLCommand startsWith(DbColumn column, String... values) {
         return addCommand(column, "=", IQueryType.STARTS_WITH, values);
     }
 
-    public SQLCommand contains(Field column, String... values) {
+    public SQLCommand contains(DbColumn column, String... values) {
         return addCommand(column, "=", IQueryType.CONTAINS, values);
     }
 
-    public SQLCommand endsWith(Field column, String... values) {
+    public SQLCommand endsWith(DbColumn column, String... values) {
         return addCommand(column, "=", IQueryType.ENDS_WITH, values);
     }
 
-    public SQLCommand count(Field column, String... values) {
+    public SQLCommand count(DbColumn column, String... values) {
         return addCommand(column, "=", IQueryType.COUNT, values);
     }
 
@@ -94,7 +91,7 @@ public class SQLCommand implements IQueryType {
      * @param values
      * @return
      */
-    public SQLCommand where(Field column, String... values) {
+    public SQLCommand where(DbColumn column, String... values) {
         return addCommand(column, "=", IQueryType.WHERE_AND, values);
     }
 
@@ -105,15 +102,16 @@ public class SQLCommand implements IQueryType {
      * @param values
      * @return
      */
-    public SQLCommand whereOR(Field column, String... values) {
+    public SQLCommand whereOR(DbColumn column, String... values) {
 
         return addCommand(column, "=", IQueryType.WHERE_OR, values);
     }
 
-    private SQLCommand addCommand(Field column, String operator, int typeOfQuery, String... values) {
+    private SQLCommand addCommand(DbColumn column, String operator, int typeOfQuery, String... values) {
         initalizeColumn(1);
         db.fieldsList.add(column);
-        return addCommand(db.fieldsList, operator, typeOfQuery, values);
+        addItemsTotheValueList(values);
+        return this;
     }
 
     public DbColumn getColumn(Field f) {
@@ -151,18 +149,28 @@ public class SQLCommand implements IQueryType {
      * @param values
      * @return
      */
-    private SQLCommand addCommand(ArrayList<Field> columns, String operator, int typeOfQuery, String... values) {
+    private SQLCommand addCommand(ArrayList<DbColumn> columns, String operator, int typeOfQuery, String... values) {
 
-        this.queryType = typeOfQuery;
+        addItemsToFieldList(columns);
+        addItemsTotheValueList(values);
+
+        return this;
+    }
+
+    void addItemsToFieldList(DbColumn... columns) {
         if (columns != null) {
-            for (Field column : columns) {
-                DbColumn col = getColumn(column);
-                db.fieldsList.add(column)
+            for (DbColumn column : columns) {
+                db.fieldsList.add(column);
             }
         }
-        addItemsTotheValueList(values);
-        db.addCommand(this);
-        return this;
+    }
+    
+    void addItemsToFieldList(ArrayList<DbColumn> columns) {
+        if (columns != null) {
+            for (DbColumn column : columns) {
+                db.fieldsList.add(column);
+            }
+        }
     }
 
     void addItemsTotheValueList(String... values) {

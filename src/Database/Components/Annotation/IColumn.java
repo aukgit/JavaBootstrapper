@@ -22,7 +22,7 @@ public @interface IColumn {
 
     public boolean unique() default false;
 
-    public boolean nullable() default true;
+    public boolean nullable() default false;
 
     public boolean insertable() default true;
 

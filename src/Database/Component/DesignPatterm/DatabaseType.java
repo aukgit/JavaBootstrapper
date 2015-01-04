@@ -5,17 +5,18 @@
  */
 package Database.Component.DesignPatterm;
 
+import Database.Components.DbColumn;
+import Database.Components.IDatabaseType;
 import Global.AppConfig;
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 
 /**
  *
  * @author Alim
  */
-public abstract class DatabaseType extends SQLCommand {
+public abstract class DatabaseType extends SQLCommand implements IDatabaseType {
 
-    public ArrayList<Field> fieldsList = new ArrayList<>(AppConfig.NUMBER_COMMAND_INITALIZE);
+    public ArrayList<DbColumn> fieldsList = new ArrayList<>(AppConfig.NUMBER_COMMAND_INITALIZE);
     public ArrayList<ArrayList<String>> valuesList = new ArrayList<>(AppConfig.NUMBER_COMMAND_INITALIZE);
 
     /**
@@ -33,8 +34,6 @@ public abstract class DatabaseType extends SQLCommand {
         super.setDatabaseType(this);
     }
 
-    public void addCommand(SQLCommand command) {
-        sqlCommandsList.add(command);
-    }
+    
 
 }
