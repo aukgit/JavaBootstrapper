@@ -5,16 +5,14 @@
  */
 package Database.Component.DesignPatterm;
 
-import Database.Components.DbColumn;
 import Database.Components.IDatabaseType;
-import Global.AppConfig;
 import java.util.ArrayList;
 
 /**
  *
  * @author Alim
  */
-public abstract class DatabaseType extends SQLCommand implements IDatabaseType {
+public abstract class DatabaseType extends SQLCommand<String, String> implements IDatabaseType {
 
     /**
      * @return the databaseType
@@ -30,8 +28,6 @@ public abstract class DatabaseType extends SQLCommand implements IDatabaseType {
         databaseType = aDatabaseType;
     }
 
-    public ArrayList<DbColumn> fieldsList = new ArrayList<>(AppConfig.NUMBER_COMMAND_INITALIZE);
-    public ArrayList<ArrayList<String>> valuesList = new ArrayList<>(AppConfig.NUMBER_COMMAND_INITALIZE);
     private static int databaseType;
 
     /**
@@ -43,7 +39,7 @@ public abstract class DatabaseType extends SQLCommand implements IDatabaseType {
     public ArrayList<Byte> queryTypesList;
 
     public String LastSQL;
-    
+
     protected final String ALIAS = "f";
     protected final String SELECT = "SELECT ";
     protected final String FROM = " FROM ";
@@ -63,12 +59,15 @@ public abstract class DatabaseType extends SQLCommand implements IDatabaseType {
     public void initialize() {
         super.setDatabaseType(this);
     }
-    
+
     public abstract String getOpeningColumnNames();
+
     public abstract String getWhereClause();
+
     public abstract String getCompleteReadQuery();
+
     public abstract String getCompleteUpdateQuery();
+
     public abstract String getCompleteInsertQuery();
-    
-    
+
 }

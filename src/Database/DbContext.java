@@ -17,16 +17,15 @@ package Database;
 
 //<editor-fold defaultstate="collapsed" desc="imports">
 
-import Database.CommonCodes.DbInitalizer;
 import Database.Component.DesignPatterm.DatabaseType;
 
 
 //</editor-fold>
 
-public abstract class DbQuery extends DbInitalizer {
+public abstract class DbContext {
     DatabaseType dbType;
 
- 
+    
     
 
 }

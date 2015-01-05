@@ -16,4 +16,5 @@ public interface IDatabaseType {
     int MICROSOFT_SQL_SERVER_COMPACT =3;
     int MICROSOFT_ACCESS =4;
     int SQL_LITE = 5;
+    
 }

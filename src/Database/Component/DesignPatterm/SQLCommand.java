@@ -9,26 +9,37 @@ import Database.Components.Annotation.IColumn;
 import Database.Components.DbColumn;
 import Database.Components.IDbColumnType;
 import Database.Components.IQueryType;
+import Global.AppConfig;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Date;
 
 /**
  *
  * @author Alim
  */
-public class SQLCommand {
+public class SQLCommand<TColumn, TValue> {
 
     DatabaseType db;
-    ArrayList<String> valuesList;
+    ArrayList<TValue> singleValuesList;
+    public 
+    
+    public ArrayList<TColumn> fieldsList = new ArrayList<>(AppConfig.NUMBER_COMMAND_INITALIZE);
 
+    /**
+     *
+     */
+    public ArrayList<ArrayList<TValue>> valuesList;
 
     protected SQLCommand() {
+        this.valuesList = new ArrayList<>(AppConfig.NUMBER_COMMAND_INITALIZE);
 
     }
 
     public SQLCommand(DatabaseType db) {
+        this.singleValuesList = new ArrayList<>(AppConfig.NUMBER_COMMAND_INITALIZE);
         this.db = db;
     }
 
@@ -36,7 +47,7 @@ public class SQLCommand {
         this.db = db;
     }
 
-    public SQLCommand where(DbColumn column, String operator, String... values) {
+    public SQLCommand where(TColumn column, String operator, TValue... values) {
         return addCommand(column, operator, IQueryType.WHERE_AND, values);
     }
 
@@ -46,7 +57,7 @@ public class SQLCommand {
      * @param columns
      * @return
      */
-    public SQLCommand where(DbColumn... columns) {
+    public SQLCommand where(TColumn... columns) {
         initalizeColumn(columns.length);
         addItemsToFieldList(columns);
         return db;
@@ -58,30 +69,30 @@ public class SQLCommand {
      * @param values
      * @return
      */
-    public SQLCommand values(String... values) {
+    public SQLCommand values(TValue... values) {
         addItemsTotheValueList(values);
         return db;
     }
 
     public SQLCommand operators(String... values) {
         initalizeValues(values.length);
-        this.valuesList.addAll(Arrays.asList(values));
+        
         return db;
     }
 
-    public SQLCommand startsWith(DbColumn column, String... values) {
+    public SQLCommand startsWith(TColumn column, TValue... values) {
         return addCommand(column, null, IQueryType.STARTS_WITH, values);
     }
 
-    public SQLCommand contains(DbColumn column, String... values) {
+    public SQLCommand contains(TColumn column, TValue... values) {
         return addCommand(column, null, IQueryType.CONTAINS, values);
     }
 
-    public SQLCommand endsWith(DbColumn column, String... values) {
+    public SQLCommand endsWith(TColumn column, TValue... values) {
         return addCommand(column, null, IQueryType.ENDS_WITH, values);
     }
 
-    public SQLCommand count(DbColumn column, String... values) {
+    public SQLCommand count(TColumn column, TValue... values) {
         return addCommand(column, "=", IQueryType.COUNT, values);
     }
 
@@ -92,7 +103,7 @@ public class SQLCommand {
      * @param values
      * @return
      */
-    public SQLCommand where(DbColumn column, String... values) {
+    public SQLCommand where(TColumn column, TValue... values) {
         return addCommand(column, "=", IQueryType.WHERE_AND, values);
     }
 
@@ -103,14 +114,14 @@ public class SQLCommand {
      * @param values
      * @return
      */
-    public SQLCommand whereOR(DbColumn column, String... values) {
+    public SQLCommand whereOR(TColumn column, TValue... values) {
 
         return addCommand(column, "=", IQueryType.WHERE_OR, values);
     }
 
-    private SQLCommand addCommand(DbColumn column, String operator, int typeOfQuery, String... values) {
+    private SQLCommand addCommand(TColumn column, String operator, int typeOfQuery, TValue... values) {
         initalizeColumn(1);
-        db.fieldsList.add(column);
+        fieldsList.add(column);
         addItemsTotheValueList(values);
         return db;
     }
@@ -149,7 +160,7 @@ public class SQLCommand {
      * @param values
      * @return
      */
-    private SQLCommand addCommand(ArrayList<DbColumn> columns, String operator, int typeOfQuery, String... values) {
+    private SQLCommand addCommand(ArrayList<TColumn> columns, String operator, int typeOfQuery, TValue... values) {
 
         addItemsToFieldList(columns);
         addItemsTotheValueList(values);
@@ -157,41 +168,41 @@ public class SQLCommand {
         return db;
     }
 
-    void addItemsToFieldList(DbColumn... columns) {
+    void addItemsToFieldList(TColumn... columns) {
         if (columns != null) {
-            for (DbColumn column : columns) {
-                db.fieldsList.add(column);
-            }
-        }
-    }
-    
-    void addItemsToFieldList(ArrayList<DbColumn> columns) {
-        if (columns != null) {
-            for (DbColumn column : columns) {
-                db.fieldsList.add(column);
+            for (TColumn column : columns) {
+                fieldsList.add(column);
             }
         }
     }
 
-    void addItemsTotheValueList(String... values) {
+    void addItemsToFieldList(ArrayList<TColumn> columns) {
+        if (columns != null) {
+            for (TColumn column : columns) {
+                fieldsList.add(column);
+            }
+        }
+    }
+
+    void addItemsTotheValueList(TValue... values) {
         if (values != null) {
             initalizeValues(values.length);
-            valuesList.addAll(Arrays.asList(values));
-            db.valuesList.add(valuesList);
+            singleValuesList.addAll(Arrays.asList(values));
+            valuesList.add(singleValuesList);
         }
     }
 
     void initalizeColumn(int rows) {
-        if (db.fieldsList == null) {
-            db.fieldsList = new ArrayList<>(rows);
+        if (fieldsList == null) {
+            fieldsList = new ArrayList<>(rows);
         }
     }
 
     void initalizeValues(int rows) {
-        if (valuesList == null) {
-            valuesList = new ArrayList<>(rows);
+        if (singleValuesList == null) {
+            singleValuesList = new ArrayList<>(rows);
         }
 
-        valuesList.clear();
+        singleValuesList.clear();
     }
 }

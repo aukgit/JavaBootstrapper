@@ -5,10 +5,18 @@
  */
 package Database.Components;
 
+import Database.Component.DesignPatterm.DatabaseType;
+
 /**
  *
  * @author Alim
  */
-public class DbTable {
+public abstract class DbSet<T> extends DatabaseType {
+
+    DatabaseType db;
     
+
+    public DbSet(DatabaseType db) {
+        this.db = db;
+    }
 }
