@@ -15,7 +15,7 @@ public abstract class DbSet<T> extends DatabaseType {
 
     DatabaseType db;
     
-
+    
     public DbSet(DatabaseType db) {
         this.db = db;
     }
