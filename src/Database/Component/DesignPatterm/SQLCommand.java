@@ -24,7 +24,7 @@ public class SQLCommand<TColumn, TValue> {
 
     DatabaseType db;
     ArrayList<TValue> singleValuesList;
-    public 
+     
     
     public ArrayList<TColumn> fieldsList = new ArrayList<>(AppConfig.NUMBER_COMMAND_INITALIZE);
 
